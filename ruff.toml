@@ -1,0 +1,6 @@
+line-length = 88
+indent-width = 4
+target-version = "py311"
+
+[lint]
+select = ["E501", "N", "E9", "F"]
