@@ -6,8 +6,8 @@ services:
     image: todo_api
     container_name: todo_api
     command: >
-      bash -c "python api/manage.py migrate
-      && python api/manage.py runserver 0.0.0.0:8000"
+      bash -c "python manage.py migrate
+      && python manage.py runserver 0.0.0.0:8000"
     volumes:
       - .:/app
     ports:
