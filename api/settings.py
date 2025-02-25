@@ -148,6 +148,8 @@ REST_FRAMEWORK = {
         'rest_framework_simplejwt.authentication.JWTAuthentication',
         'rest_framework.authentication.SessionAuthentication',
     ],
+    'ORDERING_PARAM': 'sort',
+    'SEARCH_PARAM': 'q',
 }
 
 # Settings for simple JWT.

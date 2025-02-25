@@ -1,11 +1,39 @@
-### GET JWT TOKEN
+### GET JWT TOKEN (step 1)
 POST http://localhost:8000/api/token/ HTTP/1.1
 Content-Type: application/json
 
 {
-  "username": "admin",
-  "password": "admin"
+  "username": "pedro",
+  "password": "roberto"
 }
-###
 
+> {% client.global.set("access_token", response.body.access); %}
+
+###  GET All user tasks (step 2)
+GET http://localhost:8000/tasks/ HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+###  POST Create a task
+POST http://localhost:8000/tasks/ HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+{
+  "title" : "Test 333",
+  "description": " Description 333"
+}
+
+> {% client.global.set("task_id", response.body.task_id); %}
+
+
+### GET the same Task Created in top
+GET http://localhost:8000/tasks/{{task_id}}/ HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+### GET Taks filter description
+GET http://localhost:8000/tasks/?description__icontains=Five HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
 ###

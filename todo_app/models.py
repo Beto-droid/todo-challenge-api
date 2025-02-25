@@ -2,7 +2,6 @@ import uuid
 
 from django.contrib.auth.models import AbstractUser
 from django.db import models
-from django.utils import timezone
 
 
 class User(AbstractUser):
@@ -39,21 +38,6 @@ class Tasks(models.Model):
         max_length=10,
         choices=StatusChoices.choices, # type: ignore
         default=StatusChoices.CREATED)
-
-    # This will update the started and completed fields.
-    def save(self, *args, **kwargs):
-        match self.status:
-            # This is the normal. the user passed from created to started to completed.
-            case self.StatusChoices.STARTED:
-                self.started_at = timezone.now()
-            case self.StatusChoices.COMPLETED:
-                time_now = self.completed_at  # Mini perf, 1 call
-                self.completed_at = time_now
-                self.task_duration = self.started_at - time_now
-            case _:
-                pass
-
-        super().save(*args, **kwargs)
 
     def __str__(self):
         return f"Task {self.task_id} by {self.user.username}"

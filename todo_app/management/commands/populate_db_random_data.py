@@ -8,23 +8,24 @@ from django.db import transaction
 
 
 class Command(BaseCommand):
-    help = 'Creates application data'
+    help = 'Creates static data'
 
     def handle(self, *args, **kwargs):
         fake = Faker()
-        # get or create superuser
         # using context manager if it fails de population we don't trash the db.
         with transaction.atomic():
             user = User.objects.create_superuser(username='admin', password='admin')
-            user1 = User.objects.create_user(username='user1', password='user1')
             user2 = User.objects.create_user(username='user2', password='user2')
             user3 = User.objects.create_user(username='user3', password='user3')
             user4 = User.objects.create_user(username='user4', password='user4')
+            user5 = User.objects.create_user(username='user5', password='user5')
 
-            users_list = [user, user1, user2, user3, user4]
+            users_list = [user, user2, user3, user4, user5]
+
+
 
             # Create fake tasks
-            for _ in range(10):
+            for _ in range(20):
                 Tasks.objects.create(
                     user=random.choice(users_list),
                     title=fake.sentence(),
@@ -32,4 +33,4 @@ class Command(BaseCommand):
                     status=Tasks.StatusChoices.CREATED
                 )
 
-            self.stdout.write(self.style.SUCCESS('Successfully populated the database with fake data'))
+            self.stdout.write(self.style.SUCCESS('Successfully populated the database with RANDOM data'))
