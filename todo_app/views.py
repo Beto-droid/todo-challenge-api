@@ -1,16 +1,24 @@
 from rest_framework import generics, viewsets, filters
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny, IsAdminUser
 
 from .filters import TasksFilter
 from .models import User, Tasks
-from .serializers import UserSerializer, TasksSerializer, TasksCreateSerializer, TasksUpdateSerializer
+from .serializers import UserSerializer, TasksSerializer, TasksCreateSerializer, TasksUpdateSerializer, UserRegistrationSerializer
 from django_filters.rest_framework import DjangoFilterBackend
 
+
+class RegistrationAPIView(generics.CreateAPIView):
+    """
+    Simple registration View
+    """
+    serializer_class = UserRegistrationSerializer
+    model = User
+    permission_classes = [AllowAny]
 
 class UserListView(generics.ListAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    pagination_class = None
+    permission_classes = [IsAdminUser]
 
 class TaskViewSet(viewsets.ModelViewSet):
     queryset = Tasks.objects.all()

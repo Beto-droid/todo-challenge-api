@@ -4,6 +4,29 @@ from rest_framework import serializers
 from .models import User, Tasks
 
 
+class UserRegistrationSerializer(serializers.ModelSerializer):
+    """
+    Simple register Serializer
+    """
+    password = serializers.CharField(max_length=128, min_length=8, write_only=True)
+
+    class Meta:
+        model = User
+        fields = ('username', 'password')
+
+    def create(self, validated_data):
+        """
+        Override the hash password via 'create_user() method'
+        :param validated_data:
+        :return:
+        """
+        user = User.objects.create_user(
+            username=validated_data['username'],
+            password=validated_data['password'],
+        )
+        return user
+
+
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
