@@ -13,7 +13,7 @@ class User(AbstractUser):
         return self.username
 
     def __repr__(self):
-        return (f"User(full_nane={repr(self.get_full_name)},"
+        return (f"User(first_name={repr(self.first_name)},"
                 f" date_joined={repr(self.date_joined)},"
                 f" is_active={repr(self.is_active)},"
                 f" date_joined={repr(self.date_joined)},"
@@ -27,13 +27,14 @@ class Tasks(models.Model):
         STARTED = 'Started'
         CREATED = 'Created'
 
-    tasks_id = models.UUIDField(primary_key=True, default=uuid.uuid4)
-    tasks_description = models.TextField()
+    task_id = models.UUIDField(primary_key=True, default=uuid.uuid4)
+    title = models.CharField(max_length=100)
+    description = models.TextField()
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='tasks_user')
     created_at = models.DateTimeField(auto_now_add=True)
     started_at = models.DateTimeField(null=True, blank=True)
     completed_at = models.DateTimeField(null=True, blank=True)
-    task_duration = models.DateTimeField(null=True, blank=True)
+    duration = models.DateTimeField(null=True, blank=True)
     status = models.CharField(
         max_length=10,
         choices=StatusChoices.choices, # type: ignore
@@ -55,10 +56,10 @@ class Tasks(models.Model):
         super().save(*args, **kwargs)
 
     def __str__(self):
-        return f"Order {self.tasks_id} by {self.user.username}"
+        return f"Task {self.task_id} by {self.user.username}"
 
     def __repr__(self):
-        return (f"Order(order_id={repr(self.tasks_id)},"
+        return (f"Tasks(task_id={repr(self.task_id)},"
                 f" user_id={repr(self.user.id)},"
                 f" user_name={repr(self.user.username)},"
                 f" created_at={repr(self.created_at)},"

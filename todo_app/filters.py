@@ -10,7 +10,8 @@ class TasksFilter(django_filters.FilterSet):
         model = Tasks
         fields = {
             'status' : ['exact'],
-            'tasks_description' : ['icontains'],
+            'title' : ['icontains'],
+            'description' : ['icontains'],
             'created_at': ['lt', 'gt', 'exact', 'range'],
             'started_at': ['lt', 'gt', 'exact', 'range'],
             'completed_at': ['lt', 'gt', 'exact', 'range'],
