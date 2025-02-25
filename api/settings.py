@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_simplejwt',
     'django_filters',
+    'drf_spectacular',
     'todo_app',
 ]
 
@@ -148,8 +149,17 @@ REST_FRAMEWORK = {
         'rest_framework_simplejwt.authentication.JWTAuthentication',
         'rest_framework.authentication.SessionAuthentication',
     ],
-    'ORDERING_PARAM': 'sort',
-    'SEARCH_PARAM': 'q',
+    'ORDERING_PARAM': 'sort',  # REST API "convection", can be also sort_by
+    'SEARCH_PARAM': 'q',  # REST APO "convection"
+    'DEFAULT_SCHEMA_CLASS' : 'drf_spectacular.openapi.AutoSchema',
+}
+
+# Spectacular settings, openapi documentation
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'TODO API',
+    'DESCRIPTION': 'Challenge api DRF',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False,
 }
 
 # Settings for simple JWT.
