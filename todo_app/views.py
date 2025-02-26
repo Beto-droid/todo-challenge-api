@@ -57,6 +57,13 @@ class TaskViewSet(viewsets.ModelViewSet):
     search_fields = ['created_at', 'description']  # for django filter.SearchFilter
     ordering_fields = ['created_at']  # For filters.OrderingFilter
 
+    # For letting the admin/staff to bypass the status changes
+    # He should be able to do this.
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context['request'] = self.request
+        return context
+
     # This will save the task to the user that created it.
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)

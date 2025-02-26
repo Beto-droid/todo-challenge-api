@@ -26,22 +26,37 @@ class TaskService:
 
     @staticmethod
     def _handle_status_change(instance, new_status):
-        if new_status == Tasks.StatusChoices.STARTED:
-            if not instance.started_at:
-                instance.started_at = timezone.now()
-            instance.completed_at = None
-            instance.duration = None
-
-        elif new_status == Tasks.StatusChoices.COMPLETED:
-            if not instance.started_at:
-                raise ValueError("Cannot complete unstarted task")
-            instance.completed_at = timezone.now()
-            instance.duration = (instance.completed_at - instance.started_at).total_seconds()
-
-        elif new_status == Tasks.StatusChoices.CREATED:
-            instance.started_at = None
-            instance.completed_at = None
-            instance.duration = None
+        match new_status:
+            case Tasks.StatusChoices.STARTED:
+                if not instance.started_at:
+                    instance.started_at = timezone.now()
+                instance.completed_at = None
+                instance.duration = None
+            case Tasks.StatusChoices.COMPLETED:
+                if not instance.started_at:
+                    raise ValueError("Cannot complete unstarted task")
+                instance.completed_at = timezone.now()
+                instance.duration = (instance.completed_at - instance.started_at).total_seconds()
+            case Tasks.StatusChoices.CREATED:
+                instance.started_at = None
+                instance.completed_at = None
+                instance.duration = None
+        # if new_status == Tasks.StatusChoices.STARTED:
+        #     if not instance.started_at:
+        #         instance.started_at = timezone.now()
+        #     instance.completed_at = None
+        #     instance.duration = None
+        #
+        # elif new_status == Tasks.StatusChoices.COMPLETED:
+        #     if not instance.started_at:
+        #         raise ValueError("Cannot complete unstarted task")
+        #     instance.completed_at = timezone.now()
+        #     instance.duration = (instance.completed_at - instance.started_at).total_seconds()
+        #
+        # elif new_status == Tasks.StatusChoices.CREATED:
+        #     instance.started_at = None
+        #     instance.completed_at = None
+        #     instance.duration = None
 
         instance.status = new_status
         return instance

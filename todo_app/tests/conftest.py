@@ -59,6 +59,29 @@ def test_tasks_for_user_2(test_user_2):
     return task_1, task_2, task_3
 
 @pytest.fixture
+def test_user_3():
+    return User.objects.create_user(
+        username='testuser3',
+        password='testpass123',
+    )
+
+@pytest.fixture
+def test_task_2_for_user_3(test_user_3):
+    task_1 = Tasks.objects.create(
+        user=test_user_3,
+        title='Test Task 1 for user 3',
+        description='Test Description 1 for user 3',
+        status=Tasks.StatusChoices.CREATED
+    )
+    task_2 = Tasks.objects.create(
+        user=test_user_3,
+        title='Test Task 2 for user 3',
+        description='Test Description 2 for user 3',
+        status=Tasks.StatusChoices.CREATED
+    )
+    return task_1, task_2
+
+@pytest.fixture
 def admin_client():
     admin = User.objects.create_superuser(
         username='admintest',

@@ -106,10 +106,19 @@ class TasksCreateSerializer(serializers.ModelSerializer):
 
 class TasksUpdateSerializer(serializers.ModelSerializer):
     task_id = serializers.UUIDField(read_only=True)
+    created_at = serializers.DateTimeField(read_only=True)
+    started_at = serializers.DateTimeField(read_only=True)
+    completed_at = serializers.DateTimeField(read_only=True)
 
     def validate(self, data):
         instance = self.instance
         new_status = data.get('status', instance.status if instance else None)
+        request = self.context.get('request')
+
+        # Enable the ability for the staff (or admin) to skip status validation
+        # He should be able to change from completed to started or created.
+        if request and request.user.is_staff:
+            return data
 
         # Block user to change from completed to started
         if instance and instance.status == Tasks.StatusChoices.COMPLETED:
@@ -127,12 +136,17 @@ class TasksUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Tasks
         fields = (
-            'user',
             'task_id',
+            'user',
+            'status',
             'title',
             'description',
-            'status',
+            'created_at',
+            'started_at',
+            'completed_at',
+            'duration'
         )
         extra_kwargs = {
-            'user': {'read_only': True}
+            'user': {'read_only': True},
+            'duration': {'read_only': True}
         }

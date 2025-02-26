@@ -1,3 +1,5 @@
+import time
+
 import pytest
 from django.urls import reverse
 from rest_framework import status
@@ -106,6 +108,52 @@ def test_delete_task_user_2(api_client, test_user_2, test_tasks_for_user_2):
     response = api_client.get(url)
     assert response.status_code == status.HTTP_200_OK
     assert len(response.data) == 2
+
+@pytest.mark.django_db
+def test_user_1_task_1_started_to_completed_check_duration_field(api_client, test_user_3, test_task_2_for_user_3):
+    """
+    This will test, if the service of calculation the duration is correct.
+    1) Login via user 1
+    2) Get the task
+    3) compare it
+    4) change from created to started.
+    5) change from started to created.
+    :param api_client:
+    :param test_user_2:
+    :param test_tasks_for_user_2:
+    :return:
+    """
+    api_client.force_authenticate(user=test_user_3)
+    updated_data = {
+        'status': Tasks.StatusChoices.STARTED,
+    }
+    url = reverse('tasks-detail', args=[test_task_2_for_user_3[0].task_id])
+    response = api_client.patch(url, updated_data, format='json')
+    assert response.status_code == status.HTTP_200_OK
+    assert response.data['status'] == updated_data['status']
+    # wait for some seconds
+    time.sleep(0.8)
+    updated_data = {
+        'status': Tasks.StatusChoices.COMPLETED,
+    }
+    url = reverse('tasks-detail', args=[test_task_2_for_user_3[0].task_id])
+    response = api_client.patch(url, updated_data, format='json')
+    assert response.status_code == status.HTTP_200_OK
+    assert response.data['status'] == updated_data['status']
+    assert response.data['duration'] >= 0
+
+@pytest.mark.django_db
+def test_admin_can_modify_completed_task(admin_client, test_user_3, test_tasks_for_user_2):
+    updated_data = {
+        'status': Tasks.StatusChoices.STARTED,
+    }
+    # Admin modifies the task
+    url = reverse('tasks-detail', args=[test_tasks_for_user_2[2].task_id])
+    response = admin_client.patch(url, updated_data, format='json')
+    assert response.status_code == status.HTTP_200_OK
+    assert response.data['status'] == updated_data['status']
+    assert response.data['completed_at'] is None
+    assert response.data['duration'] is None
 
 @pytest.mark.django_db
 def test_admin_user_list(admin_client):
