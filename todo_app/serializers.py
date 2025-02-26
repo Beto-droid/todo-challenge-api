@@ -52,12 +52,12 @@ class UserLoginSerializer(serializers.Serializer):
         if username and password:
             user = authenticate(username=username, password=password)
             if not user:
-                raise serializers.ValidationError("Invalid credentials, try again")
+                raise serializers.ValidationError({"user_status": ["Invalid credentials, try again"]})
             if not user.is_active:
-                raise serializers.ValidationError("Account disabled, contact admin")
+                raise serializers.ValidationError({"user_status": ["Account disabled, contact admin"]})
             attrs['user'] = user
         else:
-            raise serializers.ValidationError("Both username and password are required")
+            raise serializers.ValidationError({"user_status": ["Both username and password are required"]})
         return attrs
 
 class TasksSerializer(serializers.ModelSerializer):
@@ -66,7 +66,7 @@ class TasksSerializer(serializers.ModelSerializer):
     created_at = serializers.DateTimeField(read_only=True)
     started_at = serializers.DateTimeField(read_only=True)
     completed_at = serializers.DateTimeField(read_only=True)
-    duration = serializers.DateTimeField(read_only=True)
+    duration = serializers.IntegerField(read_only=True)
 
     class Meta:
         model = Tasks
@@ -115,7 +115,9 @@ class TasksUpdateSerializer(serializers.ModelSerializer):
         if instance and instance.status == Tasks.StatusChoices.COMPLETED:
             if new_status != Tasks.StatusChoices.COMPLETED:
                 raise serializers.ValidationError(
-                    "Completed tasks cannot be modified"
+                    {
+                    "task_status" : ["Completed tasks cannot be modified"]
+                    }
                 )
         return data
 

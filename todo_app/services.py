@@ -36,7 +36,7 @@ class TaskService:
             if not instance.started_at:
                 raise ValueError("Cannot complete unstarted task")
             instance.completed_at = timezone.now()
-            instance.duration = instance.completed_at - instance.started_at
+            instance.duration = (instance.completed_at - instance.started_at).total_seconds()
 
         elif new_status == Tasks.StatusChoices.CREATED:
             instance.started_at = None

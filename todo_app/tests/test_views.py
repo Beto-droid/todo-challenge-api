@@ -43,7 +43,7 @@ def test_task_list_user_2_double_task(api_client, test_user_2, test_tasks_for_us
     url = reverse('tasks-list')
     response = api_client.get(url)
     assert response.status_code == status.HTTP_200_OK
-    assert len(response.data) == 2
+    assert len(response.data) == 3
 
 @pytest.mark.django_db
 def test_update_task_user_2(api_client, test_user_2, test_tasks_for_user_2):
@@ -55,16 +55,14 @@ def test_update_task_user_2(api_client, test_user_2, test_tasks_for_user_2):
     :return:
     """
     api_client.force_authenticate(user=test_user_2)
-    user_2_task_2_uuid = test_tasks_for_user_2[1].task_id.urn[9:]
-    from todo_app.models import Tasks
     updated_data = {
         'title': 'Updated Task Title',
         'description': 'Updated Description',
         'status': Tasks.StatusChoices.STARTED,
     }
-    url = f'/tasks/{user_2_task_2_uuid}/'
+    url = reverse('tasks-detail', args=[test_tasks_for_user_2[1].task_id])
     response = api_client.put(url, updated_data, format='json')
-    assert response.status_code == 200
+    assert response.status_code == status.HTTP_200_OK
     assert response.data['title'] == updated_data['title']
     assert response.data['description'] == updated_data['description']
     assert response.data['status'] == updated_data['status']
@@ -79,17 +77,15 @@ def test_update_user_2_status_completed_to_another_should_fail(api_client, test_
     :return:
     """
     api_client.force_authenticate(user=test_user_2)
-    user_2_task_2_uuid = test_tasks_for_user_2[2].task_id.urn[9:]
-    from todo_app.models import Tasks
     updated_data = {
         'status': Tasks.StatusChoices.STARTED,
     }
-    url = f'/tasks/{user_2_task_2_uuid}/'
-    response = api_client.put(url, updated_data, format='json')
-    assert response.status_code == 200
-    assert response.data['title'] == updated_data['title']
-    assert response.data['description'] == updated_data['description']
-    assert response.data['status'] == updated_data['status']
+    url = reverse('tasks-detail', args=[test_tasks_for_user_2[2].task_id])
+    response = api_client.patch(url, updated_data, format='json')
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert response.json() == {
+        'task_status': ['Completed tasks cannot be modified']
+    }
 
 
 @pytest.mark.django_db
@@ -102,14 +98,14 @@ def test_delete_task_user_2(api_client, test_user_2, test_tasks_for_user_2):
     :return:
     """
     api_client.force_authenticate(user=test_user_2)
-    user_2_task_2_uuid = test_tasks_for_user_2[1].task_id.urn[9:]
-    url = f'/tasks/{user_2_task_2_uuid}/'
+    url = reverse('tasks-detail', args=[test_tasks_for_user_2[1].task_id])
     response = api_client.delete(url)
     assert response.status_code == 204
+    assert response.status_code == status.HTTP_204_NO_CONTENT
     url = reverse('tasks-list')
     response = api_client.get(url)
     assert response.status_code == status.HTTP_200_OK
-    assert len(response.data) == 1
+    assert len(response.data) == 2
 
 @pytest.mark.django_db
 def test_admin_user_list(admin_client):

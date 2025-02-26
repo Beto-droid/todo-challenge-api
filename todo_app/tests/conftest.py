@@ -61,9 +61,8 @@ def test_tasks_for_user_2(test_user_2):
 @pytest.fixture
 def admin_client():
     admin = User.objects.create_superuser(
-        username='admin',
+        username='admintest',
         password='adminpass',
-        email='admin@example.com'
     )
     client = APIClient()
     client.force_authenticate(user=admin)

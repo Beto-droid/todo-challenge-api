@@ -33,7 +33,7 @@ class Tasks(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     started_at = models.DateTimeField(null=True, blank=True)
     completed_at = models.DateTimeField(null=True, blank=True)
-    duration = models.DurationField(null=True, blank=True)
+    duration = models.PositiveIntegerField(null=True, blank=True, db_comment="Data in Seconds")
     status = models.CharField(
         max_length=10,
         choices=StatusChoices.choices, # type: ignore
@@ -47,4 +47,7 @@ class Tasks(models.Model):
                 f" user_id={repr(self.user.id)},"
                 f" user_name={repr(self.user.username)},"
                 f" created_at={repr(self.created_at)},"
+                f" started_at={repr(self.started_at)},"
+                f" completed_at={repr(self.completed_at)},"
+                f" duration={repr(self.duration)} seconds,"
                 f" status={repr(self.status)} )")
