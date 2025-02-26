@@ -14,15 +14,13 @@ class Command(BaseCommand):
         fake = Faker()
         # using context manager if it fails de population we don't trash the db.
         with transaction.atomic():
-            user = User.objects.create_superuser(username='admin', password='admin')
+            user = User.objects.create_superuser(username='random', password='random')
             user2 = User.objects.create_user(username='user2', password='user2')
             user3 = User.objects.create_user(username='user3', password='user3')
             user4 = User.objects.create_user(username='user4', password='user4')
             user5 = User.objects.create_user(username='user5', password='user5')
 
             users_list = [user, user2, user3, user4, user5]
-
-
 
             # Create fake tasks
             for _ in range(20):

@@ -33,7 +33,7 @@ class Tasks(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     started_at = models.DateTimeField(null=True, blank=True)
     completed_at = models.DateTimeField(null=True, blank=True)
-    duration = models.DateTimeField(null=True, blank=True)
+    duration = models.DurationField(null=True, blank=True)
     status = models.CharField(
         max_length=10,
         choices=StatusChoices.choices, # type: ignore

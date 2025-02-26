@@ -28,9 +28,42 @@ Authorization: Bearer {{access_token}}
 
 
 ### GET the same Task Created in top
+
 GET http://localhost:8000/tasks/{{task_id}}/ HTTP/1.1
 Content-Type: application/json
 Authorization: Bearer {{access_token}}
+
+### PUT the same Task Created in top
+
+PUT http://localhost:8000/tasks/{{task_id}}/ HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+{
+  "title" : "Descriptive title",
+  "description": "Titelated Description",
+  "status": "Started"
+}
+
+### PATCH the same Task Created in top
+
+PATCH http://localhost:8000/tasks/{{task_id}}/ HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+{
+  "title" : "Patched title 1"
+}
+
+
+### PATCH status
+PATCH http://localhost:8000/tasks/{{task_id}}/ HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+{
+  "status" : "Started"
+}
 
 ### GET Taks filter description
 GET http://localhost:8000/tasks/?description__icontains=Five HTTP/1.1

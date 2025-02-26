@@ -11,18 +11,17 @@ class Command(BaseCommand):
     help = 'Creates random data'
 
     def handle(self, *args, **kwargs):
-        fake = Faker()
         # get or create superuser
         # using context manager if it fails de population we don't trash the db.
         with transaction.atomic():
-            user = User.objects.create_superuser(username='carlos', password='carlos')
+            admin = User.objects.create_superuser(username='admin', password='admin')
             user1 = User.objects.create_user(username='pedro', password='roberto')
             user2 = User.objects.create_user(username='claudia', password='gonzales')
             user3 = User.objects.create_user(username='nicolino', password='roche')
             user4 = User.objects.create_user(username='ricardo', password='Fort')
 
             Tasks.objects.create(
-                user=user,
+                user=admin,
                 title="Clean the room",
                 description="You need to clean the room",
                 status=Tasks.StatusChoices.CREATED
