@@ -14,3 +14,7 @@ Generate api schema doc
 
 python manage.py spectacular --color --file schema.yml
 
+
+docker compose exec todo_api python manage.py populate_db_static_data
+docker compose exec todo_api python manage.py populate_db_random_data
+
