@@ -8,7 +8,7 @@ from .views import RegistrationAPIView, LoginAPIView
 urlpatterns = [
     path('users/', views.UserListView.as_view(), name='user-list'),
     path('register/', RegistrationAPIView.as_view(), name='registration'),
-    path('login/', LoginAPIView.as_view())
+    path('login/', LoginAPIView.as_view(), name='user-login'),
 ]
 
 router = DefaultRouter()

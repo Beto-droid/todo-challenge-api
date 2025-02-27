@@ -31,7 +31,7 @@ class LoginAPIView(generics.GenericAPIView):
         user = serializer.validated_data['user']
         login(request, user)
         return Response(
-            {"message": "Logged in successfully", "username": user.username},
+            {"user_status": "Logged in successfully", "username": user.username},
             status=status.HTTP_200_OK,
         )
 
@@ -39,6 +39,7 @@ class UserListView(generics.ListAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     permission_classes = [IsAdminUser]
+
 
 class TaskViewSet(viewsets.ModelViewSet):
     queryset = Tasks.objects.all()
@@ -75,9 +76,6 @@ class TaskViewSet(viewsets.ModelViewSet):
         if self.action in ['update', 'partial_update']:
             return TasksUpdateSerializer
         return super().get_serializer_class()
-
-    # def partial_update(self, request, *args, **kwargs):
-
 
     # Override get, shows only users tasks or admin
     def get_queryset(self):

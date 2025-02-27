@@ -4,6 +4,7 @@ cfgv==3.4.0
 coverage==7.6.12
 distlib==0.3.9
 Django==5.1.6
+django-cors-headers==4.7.0
 django-extensions==3.2.3
 django-filter==25.1
 django-prometheus==2.3.1

@@ -49,11 +49,13 @@ INSTALLED_APPS = [
     'django_filters',
     'drf_spectacular',
     'django_prometheus',
+    'corsheaders',
     'todo_app',
 ]
 
 MIDDLEWARE = [
     'django_prometheus.middleware.PrometheusBeforeMiddleware',  # MUST BE ON TOP
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -173,3 +175,31 @@ SPECTACULAR_SETTINGS = {
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=90),
 }
+
+REACT_VITE_FRONT_URL = os.getenv('REACT_VITE_FRONT_URL')
+
+# CORS SETTINGS
+CORS_ALLOWED_ORIGINS = [
+    REACT_VITE_FRONT_URL,  # todo_vite
+]
+
+CORS_ALLOW_METHODS = [
+    'DELETE',
+    'GET',
+    'OPTIONS',
+    'PATCH',
+    'POST',
+    'PUT',
+]
+
+CORS_ALLOW_HEADERS = [
+    'accept',
+    'accept-encoding',
+    'authorization',
+    'content-type',
+    'dnt',
+    'origin',
+    'user-agent',
+    'x-csrftoken',
+    'x-requested-with',
+]
