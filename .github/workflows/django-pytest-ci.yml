@@ -39,9 +39,9 @@ jobs:
 
       - name: Build and run Docker Compose
         run: |
-          docker compose up -d --build
+          docker compose up -d --build todo_api todo_db
           sleep 30 # Wait for PostgreSQL to be ready
 
       - name: Run tests
         run: |
-          docker-compose exec todo_api pytest
+          docker compose exec todo_api pytest
