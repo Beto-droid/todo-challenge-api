@@ -3,8 +3,10 @@ import uuid
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
+from django_prometheus.models import ExportModelOperationsMixin
 
-class User(AbstractUser):
+
+class User(ExportModelOperationsMixin('User'), AbstractUser):
     """
     Use the Django AbstractUser for compatibility
     """
@@ -20,7 +22,7 @@ class User(AbstractUser):
                 f" email={repr(self.email)})")
     pass
 
-class Tasks(models.Model):
+class Tasks(ExportModelOperationsMixin('Tasks'), models.Model):
     class StatusChoices(models.TextChoices):
         COMPLETED = 'Completed'
         STARTED = 'Started'

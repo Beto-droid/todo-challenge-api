@@ -58,6 +58,35 @@ paths:
               schema:
                 $ref: '#/components/schemas/TokenRefresh'
           description: ''
+  /login/:
+    post:
+      operationId: login_create
+      description: API View to log in a user via session authentication.
+      tags:
+      - login
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserLogin'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UserLogin'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UserLogin'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserLogin'
+          description: ''
   /register/:
     post:
       operationId: register_create
@@ -250,13 +279,13 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/PatchedTasks'
+              $ref: '#/components/schemas/PatchedTasksUpdate'
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/PatchedTasks'
+              $ref: '#/components/schemas/PatchedTasksUpdate'
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/PatchedTasks'
+              $ref: '#/components/schemas/PatchedTasksUpdate'
       security:
       - jwtAuth: []
       - cookieAuth: []
@@ -265,7 +294,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Tasks'
+                $ref: '#/components/schemas/TasksUpdate'
           description: ''
     delete:
       operationId: tasks_destroy
@@ -304,7 +333,7 @@ paths:
           description: ''
 components:
   schemas:
-    PatchedTasks:
+    PatchedTasksUpdate:
       type: object
       properties:
         task_id:
@@ -313,6 +342,7 @@ components:
           readOnly: true
         user:
           type: integer
+          readOnly: true
         status:
           $ref: '#/components/schemas/StatusEnum'
         title:
@@ -333,9 +363,9 @@ components:
           format: date-time
           readOnly: true
         duration:
-          type: string
-          format: date-time
+          type: integer
           readOnly: true
+          nullable: true
     StatusEnum:
       enum:
       - Completed
@@ -375,8 +405,7 @@ components:
           format: date-time
           readOnly: true
         duration:
-          type: string
-          format: date-time
+          type: integer
           readOnly: true
       required:
       - completed_at
@@ -410,22 +439,42 @@ components:
     TasksUpdate:
       type: object
       properties:
-        user:
-          type: integer
-          readOnly: true
         task_id:
           type: string
           format: uuid
           readOnly: true
+        user:
+          type: integer
+          readOnly: true
+        status:
+          $ref: '#/components/schemas/StatusEnum'
         title:
           type: string
           maxLength: 100
         description:
           type: string
-        status:
-          $ref: '#/components/schemas/StatusEnum'
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        started_at:
+          type: string
+          format: date-time
+          readOnly: true
+        completed_at:
+          type: string
+          format: date-time
+          readOnly: true
+        duration:
+          type: integer
+          readOnly: true
+          nullable: true
       required:
+      - completed_at
+      - created_at
       - description
+      - duration
+      - started_at
       - task_id
       - title
       - user
@@ -485,6 +534,17 @@ components:
           description: Designates that this user has all permissions without explicitly
             assigning them.
       required:
+      - username
+    UserLogin:
+      type: object
+      description: Simple Login Session based for testing.
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+      required:
+      - password
       - username
     UserRegistration:
       type: object
