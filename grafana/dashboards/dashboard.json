@@ -625,6 +625,21 @@
                 }
               }
             ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "api-beatstream-api"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#1f78c1",
+                  "mode": "fixed"
+                }
+              }
+            ]
           }
         ]
       },
@@ -1088,7 +1103,7 @@
   "timepicker": {},
   "timezone": "",
   "title": "a Django Prometheus",
-  "uid": "Prometheus",
+  "uid": "O6v4rMpizda",
   "version": 1,
   "weekStart": ""
 }
