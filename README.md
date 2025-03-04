@@ -123,10 +123,8 @@ To start the entire application stack, run:
 
 ## Additional Notes
 
-- **Silk Query Check:** Use Silk to monitor and debug SQL queries.
 - **API Configuration:** The auto API config endpoints ensure you have live documentation for your API.
-- **Monitoring Tools:** Grafana and Prometheus are set up for real-time monitoring. (needs to load this dashboard
-- https://grafana.com/grafana/dashboards/9528-django-prometheus/ )
+- **Monitoring Tools:** Grafana and Prometheus are set up for real-time monitoring.
 - **CI/CD Integration:** GitHub Actions is configured to build Docker images and run tests automatically on push.
 
 
