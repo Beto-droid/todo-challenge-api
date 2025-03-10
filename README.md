@@ -102,11 +102,11 @@ To start the entire application stack, run:
    ```
    * Django API swagger-ui
    ```
-   http://0.0.0.0:8000/api/schema/redoc/
+   http://0.0.0.0:8000/api/schema/swagger-ui/
    ```
     * Prometheus
    ```
-   http://http://0.0.0.0:9090
+   http://0.0.0.0:9090
    ```
     * Grafana
    ```

@@ -56,7 +56,7 @@ Authorization: Bearer {{access_token}}
 }
 
 
-### PATCH status
+### PATCH status (using pedro that its an admin so it should be hable to)
 PATCH http://localhost:8000/tasks/{{task_id}}/ HTTP/1.1
 Content-Type: application/json
 Authorization: Bearer {{access_token}}
@@ -65,8 +65,27 @@ Authorization: Bearer {{access_token}}
   "status" : "Started"
 }
 
-### GET Taks filter description
-GET http://localhost:8000/tasks/?description__icontains=Five HTTP/1.1
+### GET Tasks filter description (search non exact description)
+GET http://localhost:8000/tasks/?description__icontains=Titelated HTTP/1.1
 Content-Type: application/json
 Authorization: Bearer {{access_token}}
-###
+
+### GET Taks filter created (search non exact description)
+GET http://localhost:8000/tasks/?created_at__gt=2025-03-09 HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+### GET Taks filter q (search for all enabled parameters, created and description)
+GET http://localhost:8000/tasks/?q=2025-03-09 HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+### GET Taks sort by created_at (gets all tasks and sorted by created_at ascending)
+GET http://localhost:8000/tasks/?sort=created_at HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+### GET Taks sort by created_at (gets all tasks and sorted by created_at descending)
+GET http://localhost:8000/tasks/?sort=-created_at HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
