@@ -16,8 +16,6 @@ services:
       - "8000:8000"
     depends_on:
       - todo_db
-      - prometheus
-      - grafana
     env_file:
       - .env
 
@@ -46,6 +44,9 @@ services:
       - '--web.enable-lifecycle'
     ports:
       - "9090:9090"
+    depends_on:
+      - todo_db
+      - todo_api
 
   grafana:
     image: grafana/grafana-oss:latest
@@ -59,7 +60,36 @@ services:
     environment:
       - GF_AUTH_ANONYMOUS_ENABLED=true
       - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
+      - GF_BASIC_ENABLED=false
+      - GF_FEATURE_TOGGLES_ENABLE=accessControlOnCall
+      - GF_INSTALL_PLUGINS=https://storage.googleapis.com/integration-artifacts/grafana-lokiexplore-app/grafana-lokiexplore-app-latest.zip;grafana-lokiexplore-app
+    depends_on:
+      - todo_db
+      - prometheus
+      - todo_api
     restart: unless-stopped
+
+  alloy:
+    image: grafana/alloy:latest
+    container_name: grafana-alloy
+    ports:
+      - "6900:6900"
+    volumes:
+      - ./alloy-config.alloy:/etc/alloy/config.alloy
+      - /var/run/docker.sock:/var/run/docker.sock
+    command: run --server.http.listen-addr=0.0.0.0:6900 --storage.path=/var/lib/alloy/data /etc/alloy/config.alloy
+    depends_on:
+      - todo_api
+      - loki
+
+  loki:
+    image: grafana/loki:latest
+    container_name: grafana-loki
+    ports:
+      - "3100:3100"
+    volumes:
+      - ./loki-config.yaml:/etc/loki/local-config.yaml
+    command: -config.file=/etc/loki/local-config.yaml
 
 volumes:
   postgres_data:

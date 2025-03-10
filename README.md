@@ -112,6 +112,10 @@ To start the entire application stack, run:
    ```
    http://0.0.0.0:3000/
    ```
+    * Grafana-alloy
+   ```
+   http://0.0.0.0:6900/
+   ```
 
 4. **Generating API Schema Documentation**
 
@@ -126,6 +130,8 @@ To start the entire application stack, run:
 - **API Configuration:** The auto API config endpoints ensure you have live documentation for your API.
 - **Monitoring Tools:** Grafana and Prometheus are set up for real-time monitoring.
 - **CI/CD Integration:** GitHub Actions is configured to build Docker images and run tests automatically on push.
+- **LOGS Integration:** Using loki to aggregate all logs of core app and Alloy for collect it and display them in grafana.
+- 
 
 
 

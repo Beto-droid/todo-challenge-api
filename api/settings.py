@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 import os
+import sys
 from datetime import timedelta
 from pathlib import Path
 
@@ -177,6 +178,46 @@ SIMPLE_JWT = {
 
 # LOGGING
 
+# LOGGING = {
+#     "version": 1,
+#     "disable_existing_loggers": False,
+#     "formatters": {
+#         "verbose": {
+#             "format": "{levelname} {asctime} {module} {message}",
+#             "style": "{",
+#         },
+#     },
+#     "handlers": {
+#         "file": {
+#             "class": "logging.FileHandler",
+#             "filename": "general.log",
+#             "level": "DEBUG",
+#             "formatter": "verbose"
+#         },
+#         "console": {
+#             "class": "logging.StreamHandler",
+#             "level": "DEBUG",
+#             "formatter": "verbose"
+#         },
+#     },
+#     "loggers": {
+#         "django": {
+#             "handlers": ["file", "console"],
+#             "level": "DEBUG",
+#             "propagate": True,
+#         },
+#         "django.request": {
+#             "handlers": ["file", "console"],
+#             "level": "DEBUG",
+#             "propagate": False,
+#         },
+#     },
+#     "root": {
+#         "handlers": ["console"],
+#         "level": "WARNING",
+#     },
+# }
+
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
@@ -184,36 +225,29 @@ LOGGING = {
         "verbose": {
             "format": "{levelname} {asctime} {module} {message}",
             "style": "{",
+            "datefmt": "%m-%d-%Y %H:%M:%S",
         },
     },
     "handlers": {
-        "file": {
-            "class": "logging.FileHandler",
-            "filename": "general.log",
+        "stdout": {
             "level": "DEBUG",
-            "formatter": "verbose"
-        },
-        "console": {
             "class": "logging.StreamHandler",
-            "level": "DEBUG",
-            "formatter": "verbose"
+            "stream": sys.stdout,  # standard output for info/debug i think?
+            "formatter": "verbose",
+        },
+        "stderr": {
+            "level": "ERROR",
+            "class": "logging.StreamHandler",
+            "stream": sys.stderr,  # for warnings and errors. im sure
+            "formatter": "verbose",
         },
     },
     "loggers": {
-        "django": {
-            "handlers": ["file", "console"],
-            "level": "DEBUG",
-            "propagate": True,
-        },
-        "django.request": {
-            "handlers": ["file", "console"],
-            "level": "DEBUG",
+        "": {
+            "handlers": ["stdout", "stderr"],
+            "level": "INFO",
             "propagate": False,
         },
-    },
-    "root": {
-        "handlers": ["console"],
-        "level": "WARNING",
     },
 }
 
